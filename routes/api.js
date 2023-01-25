@@ -78,10 +78,10 @@ module.exports = function (app) {
             return console.log(err.stack);
           }
           else {
-            ProjectModel.updateOne({ _id }, { ...updateObj, updated_on: new Date() }, (err, result) => {
-              if (err) {
-                return console.log(err.stack);
+            ProjectModel.updateOne({ _id }, {$set: { ...updateObj, updated_on: new Date() }}, (errSecond, result) => {
+              if (errSecond || result.modifiedCount < 1) {
                 res.json({ "error": 'could not update', "_id": _id });
+                return console.log(errSecond);
               }
               else {
                 res.json({ "result": 'successfully updated', "_id": _id });
